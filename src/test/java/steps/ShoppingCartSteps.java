@@ -1,10 +1,13 @@
 package steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import shop.Product;
 import shop.ShoppingCart;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,6 +44,17 @@ public class ShoppingCartSteps {
     @Given("the cart contains {string} priced {int}")
     public void theCartContains(String name, int price) {
         cart.addProduct(new Product(name, price));
+    }
+
+    // A Data Table passes MANY rows of data into ONE step,
+    // while a Scenario Outline repeats the WHOLE scenario once per row.
+    @Given("the cart contains the following products:")
+    public void theCartContainsTheFollowingProducts(DataTable dataTable) {
+        for (Map<String, String> row : dataTable.asMaps()) {
+            String name = row.get("name");
+            int price = Integer.parseInt(row.get("price"));
+            cart.addProduct(new Product(name, price));
+        }
     }
 
     // Check how many items the cart holds.

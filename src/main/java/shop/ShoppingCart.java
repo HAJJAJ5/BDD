@@ -63,4 +63,26 @@ public class ShoppingCart {
         }
         return "Checkout successful";
     }
+
+    /**
+     * A readable snapshot of the whole cart: every product, the item count,
+     * the current discount rate and the total. Used by the @snapshot hook to
+     * capture the cart state when a scenario fails.
+     */
+    public String describe() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ShoppingCart{items=[");
+        for (int i = 0; i < items.size(); i++) {
+            Product product = items.get(i);
+            if (i > 0) {
+                sb.append(", ");
+            }
+            sb.append(product.getName()).append("=").append(product.getPrice());
+        }
+        sb.append("], itemCount=").append(items.size());
+        sb.append(", discountRate=").append(discountRate);
+        sb.append(", total=").append(getTotal());
+        sb.append("}");
+        return sb.toString();
+    }
 }
